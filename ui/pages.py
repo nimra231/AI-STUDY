@@ -44,7 +44,13 @@ def _log_activity(st, action: str):
 
 
 def _section_header(st, title: str, subtitle: str = ""):
-    st.markdown(f'<div class="section-header">{title}</div>', unsafe_allow_html=True)
+    # Highlight the first word like a marker stroke — the page's signature accent.
+    words = title.split(" ", 1)
+    if len(words) == 2:
+        styled_title = f'<span class="marker-highlight">{words[0]}</span> {words[1]}'
+    else:
+        styled_title = f'<span class="marker-highlight">{title}</span>'
+    st.markdown(f'<div class="section-header">{styled_title}</div>', unsafe_allow_html=True)
     if subtitle:
         st.markdown(f'<div class="section-subheader">{subtitle}</div>', unsafe_allow_html=True)
 
