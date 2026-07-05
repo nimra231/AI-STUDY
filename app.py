@@ -39,27 +39,36 @@ inject_custom_css(st)
 # ---------------------------------------------------------------------------
 # Sidebar: branding, navigation, and API key
 # ---------------------------------------------------------------------------
+PAGES = {
+    "🏠  Dashboard": render_dashboard,
+    "📤  Upload Notes": render_upload_notes,
+    "💬  AI Tutor": render_ai_tutor,
+    "📝  Summary": render_summary,
+    "🧠  Quiz Generator": render_quiz,
+    "🗂️  Flashcards": render_flashcards,
+    "📅  Study Planner": render_study_planner,
+}
+
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = list(PAGES.keys())[0]
+
 with st.sidebar:
     st.markdown(
         f'<div class="brand-header">'
-        f'<span style="font-size:1.6rem;">📚</span>'
-        f'<span class="brand-title">{APP_NAME}</span>'
+        f'<span style="font-size:1.5rem;">📚</span>'
+        f'<span class="brand-title">Study<span class="marker-highlight">Mate</span> AI</span>'
         f'</div>',
         unsafe_allow_html=True,
     )
     st.markdown(f'<div class="brand-tagline">{APP_TAGLINE}</div>', unsafe_allow_html=True)
 
-    PAGES = {
-        "🏠 Dashboard": render_dashboard,
-        "📤 Upload Notes": render_upload_notes,
-        "💬 AI Tutor": render_ai_tutor,
-        "📝 Summary": render_summary,
-        "🧠 Quiz Generator": render_quiz,
-        "🗂️ Flashcards": render_flashcards,
-        "📅 Study Planner": render_study_planner,
-    }
+    for page_name in PAGES:
+        is_active = st.session_state["current_page"] == page_name
+        if st.button(page_name, key=f"nav_{page_name}", type="primary" if is_active else "secondary"):
+            st.session_state["current_page"] = page_name
+            st.rerun()
 
-    selected_page = st.radio("Navigate", list(PAGES.keys()), label_visibility="collapsed")
+    selected_page = st.session_state["current_page"]
 
     st.markdown("---")
     st.markdown("##### 🔑 Gemini API Key")
