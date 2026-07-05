@@ -33,7 +33,14 @@ CHUNK_OVERLAP = 150
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 # Gemini model used for all generation tasks (chat, summaries, quizzes...).
-GEMINI_MODEL_NAME = "gemini-1.5-flash"
+# Using the "latest" alias so the app keeps working automatically as Google
+# rotates the underlying model version (avoids hard 404s when a pinned
+# version like gemini-1.5-flash gets shut down).
+GEMINI_MODEL_NAME = "gemini-flash-latest"
+
+# Backup model names to try automatically if the primary one 404s
+# (Google occasionally retires model aliases; this keeps the app resilient).
+GEMINI_MODEL_FALLBACKS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash"]
 
 # How many chunks to retrieve from FAISS per query.
 RETRIEVER_TOP_K = 4
